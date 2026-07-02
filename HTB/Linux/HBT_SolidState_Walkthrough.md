@@ -1,4 +1,4 @@
-# HackTheBox  SolidState
+# HackTheBox - SolidState
 
 ## Nmap Scan
 

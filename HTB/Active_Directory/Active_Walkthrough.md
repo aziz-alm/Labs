@@ -1,4 +1,4 @@
-# HackTheBox  Active
+# HackTheBox - Active
 
 Active is a Windows Active Directory box that covers two classic AD attack techniques: **GPP password decryption** and **Kerberoasting**. A great intro to AD pentesting.
 
