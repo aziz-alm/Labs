@@ -4,5 +4,5 @@ Walkthrough writeups for machines I've rooted on [HackTheBox](https://www.hackth
 
 | Machine                                           | Difficulty | Key Topics                                                                                                               |
 | ------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
-| [SolidState](./HTB/HBT_SolidState_Walkthrough.md) | Medium     | Apache James 2.3.2, POP3 email enumeration, rbash escape, cron job abuse                                                 |
-| [Hawk](./HTB/HAWK_Walkthough.md)                  | Medium     | FTP anonymous access, OpenSSL file decryption, Drupal 7 PHP filter RCE, H2 database exploitation via SSH port forwarding |
+| [SolidState](HBT_SolidState_Walkthrough.md) | Medium     | Apache James 2.3.2, POP3 email enumeration, rbash escape, cron job abuse                                                 |
+| [Hawk](Labs-Remote/HTB/Linux/HAWK_Walkthough.md)                  | Medium     | FTP anonymous access, OpenSSL file decryption, Drupal 7 PHP filter RCE, H2 database exploitation via SSH port forwarding |
