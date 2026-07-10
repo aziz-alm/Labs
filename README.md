@@ -7,4 +7,4 @@ Walkthrough writeups for machines I've rooted on [HackTheBox](https://www.hackth
 | [SolidState](HBT_SolidState_Walkthrough.md)            | Medium     | Apache James 2.3.2, POP3 email enumeration, rbash escape, cron job abuse                                                 |
 | [Hawk](Labs-Remote/HTB/Linux/HAWK_Walkthough.md)       | Medium     | FTP anonymous access, OpenSSL file decryption, Drupal 7 PHP filter RCE, H2 database exploitation via SSH port forwarding |
 | [Active](./HTB/Active_Directory/Active_Walkthrough.md) | Easy       | SMB enumeration, GPP password decryption, Kerberoasting, psexec                                                          |
-|                                                        |            |                                                                                                                          |
+| [DevOops](HTB/Linux/DevOops-Walkthrough.md)            | Medium     | XXE arbitrary file read, SSH private key extraction, git history analysis, root key recovered from a commit diff         |
