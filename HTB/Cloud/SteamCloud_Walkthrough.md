@@ -66,7 +66,7 @@ Using `kubeletctl`, a tool specifically designed for interacting with the Kubele
 kubeletctl -s 10.129.96.167 pods
 ```
 
-![kubeletctl pods listing showing 8 running pods](./cloud_Imgs/Pasted%20image%2020260714143902.png)
+![kubeletctl pods listing showing 8 running pods](Pasted%20image%2020260714143902.png)
 
 The Kubelet accepted our request without any authentication - that's a significant misconfiguration. We can see 8 pods running, most of them are standard kube-system components (etcd, apiserver, controller-manager, scheduler, proxy, coredns, storage-provisioner). The interesting one is the **nginx** pod in the `default` namespace - that's the only user-deployed pod.
 
@@ -78,7 +78,7 @@ The Kubelet accepted our request without any authentication - that's a significa
 kubeletctl -s 10.129.96.167 scan rce
 ```
 
-![kubeletctl RCE scan showing nginx and kube-proxy are exploitable](./cloud_Imgs/Pasted%20image%2020260714144328.png)
+![kubeletctl RCE scan showing nginx and kube-proxy are exploitable](Pasted%20image%2020260714144328.png)
 
 The scan shows that the **nginx** container (and kube-proxy) have RCE enabled - meaning we can execute arbitrary commands inside them through the unauthenticated Kubelet API. This is the entry point.
 
@@ -101,13 +101,13 @@ Then I dropped into a full bash shell:
 kubeletctl -s 10.129.96.167 exec "/bin/bash" -p nginx -c nginx
 ```
 
-![Shell access in the nginx container as root](./cloud_Imgs/Pasted%20image%2020260714144633.png)
+![Shell access in the nginx container as root](Pasted%20image%2020260714144633.png)
 
 We're root inside the nginx container. This isn't root on the actual host yet - it's root inside a container, which is an important distinction. But it's enough to grab the user flag.
 
 ### User Flag
 
-![User flag found in /root/user.txt inside the nginx container](./cloud_Imgs/Pasted%20image%2020260714144728.png)
+![User flag found in /root/user.txt inside the nginx container](Pasted%20image%2020260714144728.png)
 
 ---
 
@@ -130,7 +130,7 @@ cat /run/secrets/kubernetes.io/serviceaccount/ca.crt
 cat /run/secrets/kubernetes.io/serviceaccount/token
 ```
 
-![ServiceAccount credentials, kubectl get pod, and kubectl auth can-i output](./cloud_Imgs/Pasted%20image%2020260714145505.png)
+![ServiceAccount credentials, kubectl get pod, and kubectl auth can-i output](Pasted%20image%2020260714145505.png)
 
 I saved the `ca.crt` and `token` to my local machine, then used them to authenticate with `kubectl`:
 
@@ -149,11 +149,11 @@ Before creating our own pod, I inspected the nginx pod's YAML spec to understand
 kubectl --server https://10.129.96.167:8443 --certificate-authority=ca.crt --token=$token get pod nginx -o yaml
 ```
 
-![kubectl get pod nginx -o yaml showing pod specification](./cloud_Imgs/Pasted%20image%2020260714150105.png)
+![kubectl get pod nginx -o yaml showing pod specification](Pasted%20image%2020260714150105.png)
 
 Key details from the output: the namespace is `default`, the image is `nginx:1.14.2` with `imagePullPolicy: Never` (meaning the image must already exist locally - no pulling from registries), and the existing pod already mounts a host path (`/opt/flag`) into `/root`. This confirms that hostPath volumes work in this cluster.
 
-![Pod YAML specification details](./cloud_Imgs/Pasted%20image%2020260714150221.png)
+![Pod YAML specification details](Pasted%20image%2020260714150221.png)
 
 ### Creating a Malicious Pod
 
@@ -182,7 +182,7 @@ spec:
 
 The critical parts here: `hostPath: path: /` maps the host's root filesystem as a volume, and `volumeMounts` makes it accessible inside the container at `/mnt`. The `hostNetwork: true` gives the pod access to the host's network stack too.
 
-![Deploying the malicious pod with kubectl apply](./cloud_Imgs/Pasted%20image%2020260714150725.png)
+![Deploying the malicious pod with kubectl apply](Pasted%20image%2020260714150725.png)
 
 One gotcha I hit - Kubernetes pod names must be lowercase RFC 1123 subdomains. My initial YAML had `Aziz-pod` (uppercase A), which got rejected. After fixing it to `aziz-pod`, the pod was created successfully:
 
@@ -191,11 +191,11 @@ kubectl --server https://10.129.96.167:8443 --certificate-authority=ca.crt --tok
 # pod/aziz-pod created
 ```
 
-![kubectl apply succeeding and kubeletctl showing the new pod](./cloud_Imgs/Pasted%20image%2020260714151036.png)
+![kubectl apply succeeding and kubeletctl showing the new pod](Pasted%20image%2020260714151036.png)
 
 Verifying with `kubeletctl`, the new pod shows up in the pod listing alongside the original nginx pod:
 
-![kubeletctl pods showing aziz-pod running in default namespace](./cloud_Imgs/Pasted%20image%2020260714151144.png)
+![kubeletctl pods showing aziz-pod running in default namespace](Pasted%20image%2020260714151144.png)
 
 ### Root Flag
 
@@ -210,7 +210,7 @@ cd root
 cat root.txt
 ```
 
-![Root flag obtained through the host filesystem mounted at /mnt](./cloud_Imgs/Pasted%20image%2020260714151339.png)
+![Root flag obtained through the host filesystem mounted at /mnt](Pasted%20image%2020260714151339.png)
 
 The `/mnt` directory contains the entire host filesystem - `bin`, `boot`, `etc`, `root`, everything. Navigating to `/mnt/root` gives us the root flag on the actual host, not just inside a container.
 
