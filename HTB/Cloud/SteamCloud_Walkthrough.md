@@ -66,7 +66,7 @@ Using `kubeletctl`, a tool specifically designed for interacting with the Kubele
 kubeletctl -s 10.129.96.167 pods
 ```
 
-![kubeletctl pods listing showing 8 running pods](./cloud_Imgs/Pasted%20image%2020260714143902.png)
+![kubeletctl pods listing showing 8 running pods](./Cloud_Imgs/Pasted%20image%2020260714143902.png)
 
 The Kubelet accepted our request without any authentication — that's a significant misconfiguration. We can see 8 pods running, most of them are standard kube-system components (etcd, apiserver, controller-manager, scheduler, proxy, coredns, storage-provisioner). The interesting one is the **nginx** pod in the `default` namespace — that's the only user-deployed pod.
 
